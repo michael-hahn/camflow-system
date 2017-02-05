@@ -1,0 +1,13 @@
+# Compiled source #
+###################
+*.class
+
+# Logs and databases #
+######################
+*.msg
+*.lck
+
+# OS generated files #
+######################
+.DS_Store
+.DS_Store? 
