@@ -1,5 +1,5 @@
 # CamFlow Intrusion Detection System
-## Using provenance captured by CamFlow and Apache Spark DISC processing platform to detect system anomaly and intrusion
+### Using provenance captured by CamFlow and Apache Spark DISC processing platform to detect system anomaly and intrusion
 # Overview
 # Example Usage
 # Getting Started
@@ -19,4 +19,4 @@ This is for supporting MQTT with Spark
      `org.eclipse.paho.client.mqtt3-1.1.0`
 5. If you performed step 4 (aka import mqtt after bahir), go to
 `camflow-system.iml`
-Swap the order of the entries (tagged <orderEntry...>) with name tag "...mqttv3-1.1.0" and "...bahir:assembly_2.11:2.0.1". 
+Swap the order of the entries (tagged `<orderEntry...>`) with name tag "...mqttv3-1.1.0" and "...bahir:assembly_2.11:2.0.1". 
