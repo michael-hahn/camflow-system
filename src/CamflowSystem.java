@@ -41,9 +41,13 @@ public class CamflowSystem {
             System.exit(1);
         }
 
+        //Record the time so that packets before the boot of this system will be filtered
+        Timestamp curnt = new Timestamp(System.currentTimeMillis());
+
+
         /* We use Spark to filter old messages now
 
-        String topicsToClean = "camflow/machines";//TODO: Cannot clean subtopics of camflow/machines
+        String topicsToClean = "camflow/machines";//
         MqttConnectOptions options = new MqttConnectOptions();
         options.setCleanSession(true);
         options.setUserName(args[1]);
@@ -151,15 +155,56 @@ public class CamflowSystem {
             }
         }, Encoders.bean(MachinePacket.class));
 
-        Dataset<MachinePacket> filterMachinePacket = decodedPacketContent.filter(new FilterFunction<MachinePacket>() {
+        //filter out old camflow/machines packets
+        Dataset<Row> filterMachinePacket = decodedPacketContent.filter(new FilterFunction<MachinePacket>() {
             @Override
             public boolean call(MachinePacket machinePacket) throws Exception {
-                Timestamp now = new Timestamp(System.currentTimeMillis());
-                return (machinePacket.getTs().equals(now) || machinePacket.getTs().after(now));
+                return (machinePacket.getTs().equals(curnt) || machinePacket.getTs().after(curnt));
             }
-        });
-
+        })
+                .select("id");
         StreamingQuery query = filterMachinePacket.writeStream()
+//                .foreach(new ForeachWriter<String>() {
+//                    @Override
+//                    public void process(String value) {
+//                        SparkSession newSpark = SparkSession
+//                                .builder()
+//                                .appName("CamFlowSystemProvenance")
+//                                .master("local[4]")
+//                                .getOrCreate();//TODO: Check API. What does it do?
+//                        //Create DataStreamReader for streaming dataFrames
+//                        Dataset<Row> provenance = newSpark
+//                                .readStream()
+//                                .format("org.apache.bahir.sql.streaming.mqtt.MQTTStreamSourceProvider")
+//                                .option("topic", "camflow/provenance/value")
+//                                .option("username", args[1])
+//                                .option("password", args[2])
+//                                .option("QoS", "2")
+//                                .load(args[0]);
+//                        Dataset<String> provenanceContent = provenance
+//                                .select("value") //SQL select operation on a data frame
+//                                .as(Encoders.STRING()); //Common type (String) Encoder to serialize the objects so that a dataset can be created.
+//                        StreamingQuery provQuery = provenanceContent.writeStream()
+//                                .outputMode("append")
+//                                .format("console")
+//                                .start();
+//                        try {
+//                            provQuery.awaitTermination();
+//                        } catch(StreamingQueryException sqe) {
+//                            System.err.println("The query terminated with an exception of the cause: " + sqe.cause());
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void close(Throwable errorOrNull) {
+//
+//                    }
+//
+//                    @Override
+//                    public boolean open(long partitionId, long version) {
+//                        return true;
+//                    }
+//                })
                 .outputMode("append")
                 .format("console")
                 .start();

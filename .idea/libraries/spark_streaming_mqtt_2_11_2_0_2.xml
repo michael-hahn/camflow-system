@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="spark-streaming-mqtt_2.11-2.0.2">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../apache-bahir-2.0.2-src/streaming-mqtt/target/spark-streaming-mqtt_2.11-2.0.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
