@@ -185,6 +185,9 @@ public class CamflowSystem {
                         StreamingQuery provQuery = provInfo.writeStream()
                                 .outputMode("append")
                                 .format("console")
+                                //.format("parquet")
+                                //.option("path", "../out/output")
+                                //.option("checkpointLocation", "../out/checkpoint")
                                 .start();
                         try {
                             provQuery.awaitTermination();

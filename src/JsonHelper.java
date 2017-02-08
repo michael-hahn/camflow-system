@@ -104,11 +104,11 @@ public class JsonHelper {
                         if (edgesInfo.get(secondLevelTag) instanceof JSONObject) {
                             JSONObject edgeInfo = (JSONObject) edgesInfo.get(secondLevelTag);
                             Iterator<String> infoKeys = edgeInfo.keys();
+                            String edgeType = "";
+                            String fromNode = "" ;
+                            String toNode = "";
                             while (infoKeys.hasNext()) {
                                 String infoTag = infoKeys.next();
-                                String edgeType = "";
-                                String fromNode = "" ;
-                                String toNode = "";
                                 if (infoTag.equals("prov:type")) {
                                     edgeType = (String) edgeInfo.get(infoTag);
                                 }
@@ -120,7 +120,12 @@ public class JsonHelper {
                                         || infoTag.equals("prov:generatedEntity")) {
                                     toNode = (String) edgeInfo.get(infoTag);
                                 }
+                            }
+                            if (!edgeType.equals("") && !fromNode.equals("") && !toNode.equals(""))
                                 retval.add(Triple.of(fromNode, toNode, edgeType));
+                            else {
+                                System.err.println("Bad-formatted JSON object -- Contact CamFlow");
+                                System.exit(1);
                             }
                         }
                     }
@@ -138,11 +143,11 @@ public class JsonHelper {
                         if (edgesInfo.get(secondLevelTag) instanceof JSONObject) {
                             JSONObject edgeInfo = (JSONObject) edgesInfo.get(secondLevelTag);
                             Iterator<String> infoKeys = edgeInfo.keys();
+                            String edgeType = "";
+                            String fromNode = "" ;
+                            String toNode = "";
                             while (infoKeys.hasNext()) {
                                 String infoTag = infoKeys.next();
-                                String edgeType = "";
-                                String fromNode = "" ;
-                                String toNode = "";
                                 if (infoTag.equals("prov:type")) {
                                     edgeType = (String) edgeInfo.get(infoTag);
                                 }
@@ -152,7 +157,12 @@ public class JsonHelper {
                                 if (infoTag.equals("prov:entity")) {
                                     toNode = (String) edgeInfo.get(infoTag);
                                 }
+                            }
+                            if (!edgeType.equals("") && !fromNode.equals("") && !toNode.equals(""))
                                 retval.add(Triple.of(fromNode, toNode, edgeType));
+                            else {
+                                System.err.println("Bad-formatted JSON object -- Contact CamFlow");
+                                System.exit(1);
                             }
                         }
                     }
