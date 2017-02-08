@@ -31,6 +31,7 @@ import java.util.zip.Inflater;
 /**
  * Created by Michael on 2/4/17.
  */
+//TODO: A global primitive needed to track machines?
 public class CamflowSystem {
 
     public static void main(String[] args) {//args: brokerURL Username Password
@@ -47,7 +48,7 @@ public class CamflowSystem {
 
         /* We use Spark to filter old messages now
 
-        String topicsToClean = "camflow/machines";//
+        String topicsToClean = "camflow/machines/1022090165";
         MqttConnectOptions options = new MqttConnectOptions();
         options.setCleanSession(true);
         options.setUserName(args[1]);
@@ -112,7 +113,6 @@ public class CamflowSystem {
                 .option("password", args[2])
                 .option("QoS", "2")
                 .load(args[0]);
-        //TODO: So far, we do not care about the time when a camflow/machine packet comes in.
         Dataset<String> packetContent = packets
                 .select("value") //SQL select operation on a data frame
                 .as(Encoders.STRING()); //Common type (String) Encoder to serialize the objects so that a dataset can be created.
@@ -121,21 +121,13 @@ public class CamflowSystem {
         Dataset<MachinePacket> decodedPacketContent = packetContent.map(new MapFunction<String, MachinePacket>() {
             @Override
             public MachinePacket call(String str) throws IOException, DataFormatException, JSONException, java.text.ParseException {
+                //decode packet using DecodePacket class
+                DecodePacket dp = new DecodePacket();
                 //Base 64 decode received packet
-                byte[] decodedBytes = Base64.getDecoder().decode(str);
+                byte[] decodedBytes = dp.decodeBase64(str);
 
                 //Zlib decompress received packet
-                Inflater inflater = new Inflater();
-                inflater.setInput(decodedBytes);
-                ByteArrayOutputStream outputStream = new ByteArrayOutputStream(decodedBytes.length);
-                byte[] buffer = new byte[1024];
-                while (!inflater.finished()) {
-                    int count = inflater.inflate(buffer);
-                    outputStream.write(buffer, 0, count);
-                }
-                outputStream.close();
-                byte[] output = outputStream.toByteArray();
-                System.out.println("Packet Content:" + new String(output));
+                byte[] output = dp.decodeZlib(decodedBytes);
 
                 //serialize the string to JSON
                 JSONObject machineJson = new JSONObject(new String(output));
@@ -156,57 +148,63 @@ public class CamflowSystem {
         }, Encoders.bean(MachinePacket.class));
 
         //filter out old camflow/machines packets
-        Dataset<Row> filterMachinePacket = decodedPacketContent.filter(new FilterFunction<MachinePacket>() {
+        Dataset<String> filterMachinePacket = decodedPacketContent.filter(new FilterFunction<MachinePacket>() {
             @Override
             public boolean call(MachinePacket machinePacket) throws Exception {
+                System.out.println("MachineTime:" + machinePacket.getTs());
+                System.out.println("Startup Time:" + curnt);
                 return (machinePacket.getTs().equals(curnt) || machinePacket.getTs().after(curnt));
             }
         })
-                .select("id");
+                .select("id")
+                .as(Encoders.STRING());
+
         StreamingQuery query = filterMachinePacket.writeStream()
-//                .foreach(new ForeachWriter<String>() {
-//                    @Override
-//                    public void process(String value) {
-//                        SparkSession newSpark = SparkSession
-//                                .builder()
-//                                .appName("CamFlowSystemProvenance")
-//                                .master("local[4]")
-//                                .getOrCreate();//TODO: Check API. What does it do?
-//                        //Create DataStreamReader for streaming dataFrames
-//                        Dataset<Row> provenance = newSpark
-//                                .readStream()
-//                                .format("org.apache.bahir.sql.streaming.mqtt.MQTTStreamSourceProvider")
-//                                .option("topic", "camflow/provenance/value")
-//                                .option("username", args[1])
-//                                .option("password", args[2])
-//                                .option("QoS", "2")
-//                                .load(args[0]);
-//                        Dataset<String> provenanceContent = provenance
-//                                .select("value") //SQL select operation on a data frame
-//                                .as(Encoders.STRING()); //Common type (String) Encoder to serialize the objects so that a dataset can be created.
-//                        StreamingQuery provQuery = provenanceContent.writeStream()
-//                                .outputMode("append")
-//                                .format("console")
-//                                .start();
-//                        try {
-//                            provQuery.awaitTermination();
-//                        } catch(StreamingQueryException sqe) {
-//                            System.err.println("The query terminated with an exception of the cause: " + sqe.cause());
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void close(Throwable errorOrNull) {
-//
-//                    }
-//
-//                    @Override
-//                    public boolean open(long partitionId, long version) {
-//                        return true;
-//                    }
-//                })
-                .outputMode("append")
-                .format("console")
+                .foreach(new ForeachWriter<String>() {
+                    @Override
+                    public void process(String value) {
+                        //create provenance process class to start process provenance
+                        System.out.println("Start machine: " + value);
+                        ProvenanceProcess pp = new ProvenanceProcess();
+                        //Create DataStreamReader for streaming dataFrames
+                        SparkSession sparkProv = SparkSession
+                                .builder()
+                                .appName("CamFlowSystemProvenance")
+                                .master("local[4]")
+                                .getOrCreate();//
+                        Dataset<Row> provenance = sparkProv
+                                .readStream()
+                                .format("org.apache.bahir.sql.streaming.mqtt.MQTTStreamSourceProvider")
+                                .option("topic", "camflow/provenance/" + value)
+                                .option("username", args[1])
+                                .option("password", args[2])
+                                .option("QoS", "2")
+                                .load(args[0]);
+                        Dataset<ProvenancePacket> provInfo = pp.parseProvenance(provenance);
+
+                        StreamingQuery provQuery = provInfo.writeStream()
+                                .outputMode("append")
+                                .format("console")
+                                .start();
+                        try {
+                            provQuery.awaitTermination();
+                        } catch (StreamingQueryException sqe) {
+                            System.err.println("The query terminated with an exception of the cause: " + sqe.cause());
+                        }
+                    }
+
+                    @Override
+                    public void close(Throwable errorOrNull) {
+
+                    }
+
+                    @Override
+                    public boolean open(long partitionId, long version) {
+                        return true;
+                    }
+                })
+//                .outputMode("append")
+//                .format("console")
                 .start();
 
         try {

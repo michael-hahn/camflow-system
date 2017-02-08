@@ -3,7 +3,7 @@
 # Overview
 # Example Usage
 # Getting Started
-## Following instructions are for developing in IntelliJIDEA
+## Following instructions are for developing in IntelliJ IDEA
 1. To set up IntelliJ environment. Download Spark source code (not the ones with Hadoop, but do download the one with all extensions including Spark SQL, Structured Streaming, and GraphX), extract and build with the following command:
 `build/mvn -DskipTests clean package`
 2. Once built. In the Project Structure -> Libraries
@@ -21,7 +21,7 @@ Import
 and
 `spark-streaming-mqtt_2.11-2.0.2.jar`
 This is for supporting MQTT with Spark
-4. **Warning: bahir contains a dependency issue**
+6. **Warning: bahir contains a dependency issue**
    * You can solve this issue by importing the following package
      `org.eclipse.paho.client.mqtt3-1.1.0`
-5. Step 4 may not be necessary.
+7. Step 6 may not be necessary.
