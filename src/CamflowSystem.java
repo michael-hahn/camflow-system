@@ -182,6 +182,7 @@ public class CamflowSystem {
                                 .load(args[0]);
                         Dataset<ProvenancePacket> provInfo = pp.parseProvenance(provenance);
 
+
                         StreamingQuery provQuery = provInfo.writeStream()
                                 .outputMode("append")
                                 .format("console")

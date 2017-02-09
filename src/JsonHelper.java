@@ -1,11 +1,20 @@
+import io.netty.handler.codec.DecoderException;
+import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
+import org.apache.spark.sql.execution.vectorized.ColumnVector;
 import org.json.JSONException;
 import org.json.JSONObject;
+import scala.math.Ordering;
 
+import java.io.IOException;
+import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.zip.DataFormatException;
 
 /**
  * Created by Michael on 2/6/17.
@@ -48,14 +57,15 @@ public class JsonHelper {
         return retval;
     }
 
-    /**
-     * This function extracts PROV-JSON info of node ID and node type into Pair (nodeId, nodeType)
+    /**TODO: Fix this documentation
+     *
      * @param jpp json object that contains packet about the provenance
-     * @return a list of Pair (nodeId, nodeType)
+     * @return
      * @throws JSONException
      */
-    public List<Pair<String, String>> jsonProvenanceNode (JSONObject jpp) throws JSONException {
-        List<Pair<String, String>> retval = new ArrayList<Pair<String, String>>();
+    public List<List<String>> jsonProvenanceNode (JSONObject jpp) throws JSONException, DataFormatException, IOException, org.apache.commons.codec.DecoderException {
+        List<List<String>> retval = new ArrayList<List<String>>();
+        DecodePacket dp = new DecodePacket();
         Iterator<String> keys = jpp.keys();
         while (keys.hasNext()) {
             String key = keys.next(); //key can be "prefix", "entity", "activity", "used", "wasInformedBy", "wasGeneratedBy", "wasDerivedFrom"
@@ -65,16 +75,19 @@ public class JsonHelper {
                     Iterator<String> innerKeys = nodeInfo.keys();
                     while (innerKeys.hasNext()) {
                         String nodeId = innerKeys.next();
-                        if (nodeInfo.get(nodeId) instanceof JSONObject) {
-                            JSONObject info = (JSONObject) nodeInfo.get(nodeId);
-                            Iterator<String> infoKeys = info.keys();
-                            while (infoKeys.hasNext()) {
-                                String infoTag = infoKeys.next();
-                                if (infoTag.equals("prov:type")) {
-                                    String nodeType = (String) info.get(infoTag);
-                                    retval.add(Pair.of(nodeId, nodeType));
-                                }
-                            }
+                        byte[] decodedNodeId = dp.decodeBase64(nodeId);
+
+                        //type can be packet or non-packet
+                        //for packet: type (8 bytes) id (2 bytes) snd_ip (4 bytes) rcv_ip (4 bytes) snd_port (2 bytes) rcv_port (2 bytes) protocol (1 byte) seq (4 bytes)
+                        //for non-packet node: type (8 bytes) id (8 bytes) boot_id (4 bytes) machine_id (4 bytes) version (4 bytes)
+                        byte[] decodedType = Arrays.copyOfRange(decodedNodeId, 0, 8);
+                        ArrayUtils.reverse(decodedType);
+
+                        //check whether it is a packet or not
+                        if (Hex.encodeHexString(decodedType).equals("2000000000100000")) {
+                            retval.add(dp.decodePacket(decodedNodeId));
+                        } else {
+                            retval.add(dp.decodeNode(decodedNodeId));
                         }
                     }
                 }
@@ -83,14 +96,15 @@ public class JsonHelper {
         return retval;
     }
 
-    /**
+    /** TODO: Fix this documentation
      * This function extracts PROV-JSON info of edges (identified by two nodes) and edge type
      * @param jpe json object that contains packet about the provenance
-     * @return a list of Triples (fromNode, toNode, edgeType)
+     * @return
      * @throws JSONException
      */
-    public List<Triple<String, String, String>> jsonProvenanceEdge (JSONObject jpe) throws JSONException {
-        List<Triple<String, String, String>> retval = new ArrayList<Triple<String, String, String>>();
+    public List<Triple<List<String>, List<String>, List<String>>> jsonProvenanceEdge (JSONObject jpe) throws JSONException {
+        List<Triple<List<String>, List<String>, List<String>>> retval = new ArrayList<Triple<List<String>, List<String>, List<String>>>();
+        DecodePacket dp = new DecodePacket();
         Iterator<String> firstLevelTags = jpe.keys();
         while (firstLevelTags.hasNext()) {
             String firstLevelTag = firstLevelTags.next();
@@ -100,29 +114,39 @@ public class JsonHelper {
                     JSONObject edgesInfo = (JSONObject) jpe.get(firstLevelTag);
                     Iterator<String> secondLevelTags = edgesInfo.keys();
                     while (secondLevelTags.hasNext()) {
-                        String secondLevelTag = secondLevelTags.next();
-                        if (edgesInfo.get(secondLevelTag) instanceof JSONObject) {
-                            JSONObject edgeInfo = (JSONObject) edgesInfo.get(secondLevelTag);
+                        String relationIdEncode = secondLevelTags.next();
+                        byte[] decodedRelationId = dp.decodeBase64(relationIdEncode);
+                        List<String> relation = dp.decodeRelation(decodedRelationId);
+                        if (edgesInfo.get(relationIdEncode) instanceof JSONObject) {
+                            List<String> fromNodeInfo = new ArrayList<String>();
+                            List<String> toNodeInfo = new ArrayList<String>();
+                            JSONObject edgeInfo = (JSONObject) edgesInfo.get(relationIdEncode);
                             Iterator<String> infoKeys = edgeInfo.keys();
-                            String edgeType = "";
-                            String fromNode = "" ;
-                            String toNode = "";
                             while (infoKeys.hasNext()) {
                                 String infoTag = infoKeys.next();
-                                if (infoTag.equals("prov:type")) {
-                                    edgeType = (String) edgeInfo.get(infoTag);
-                                }
                                 if (infoTag.equals("prov:entity") || infoTag.equals("prov:informant")
                                         || infoTag.equals("prov:usedEntity")) {
-                                    fromNode = (String) edgeInfo.get(infoTag);
+                                    String fromNode = (String) edgeInfo.get(infoTag);
+                                    byte[] decodedNodeId = dp.decodeBase64(fromNode);
+                                    byte[] decodedType = Arrays.copyOfRange(decodedNodeId, 0, 8);
+                                    ArrayUtils.reverse(decodedType);
+                                    if (Hex.encodeHexString(decodedType).equals("2000000000100000"))
+                                        fromNodeInfo = dp.decodePacket(decodedNodeId);
+                                    else fromNodeInfo = dp.decodeNode(decodedNodeId);
                                 }
                                 if (infoTag.equals("prov:activity") || infoTag.equals("prov:informed")
                                         || infoTag.equals("prov:generatedEntity")) {
-                                    toNode = (String) edgeInfo.get(infoTag);
+                                    String toNode = (String) edgeInfo.get(infoTag);
+                                    byte[] decodedNodeId = dp.decodeBase64(toNode);
+                                    byte[] decodedType = Arrays.copyOfRange(decodedNodeId, 0, 8);
+                                    ArrayUtils.reverse(decodedType);
+                                    if (Hex.encodeHexString(decodedType).equals("2000000000100000"))
+                                        toNodeInfo = dp.decodePacket(decodedNodeId);
+                                    else toNodeInfo = dp.decodeNode(decodedNodeId);
                                 }
                             }
-                            if (!edgeType.equals("") && !fromNode.equals("") && !toNode.equals(""))
-                                retval.add(Triple.of(fromNode, toNode, edgeType));
+                            if (!fromNodeInfo.isEmpty() && !toNodeInfo.isEmpty() && !relation.isEmpty())
+                                retval.add(Triple.of(fromNodeInfo, toNodeInfo, relation));
                             else {
                                 System.err.println("Bad-formatted JSON object -- Contact CamFlow");
                                 System.exit(1);
@@ -131,35 +155,42 @@ public class JsonHelper {
                     }
                 }
             }
-        }
-        while (firstLevelTags.hasNext()) {
-            String firstLevelTag = firstLevelTags.next();
             if (firstLevelTag.equals("wasGeneratedBy")) {
                 if (jpe.get(firstLevelTag) instanceof JSONObject) {
                     JSONObject edgesInfo = (JSONObject) jpe.get(firstLevelTag);
                     Iterator<String> secondLevelTags = edgesInfo.keys();
                     while (secondLevelTags.hasNext()) {
-                        String secondLevelTag = secondLevelTags.next();
-                        if (edgesInfo.get(secondLevelTag) instanceof JSONObject) {
-                            JSONObject edgeInfo = (JSONObject) edgesInfo.get(secondLevelTag);
+                        String relationIdEncode = secondLevelTags.next();
+                        byte[] decodedRelationId = dp.decodeBase64(relationIdEncode);
+                        List<String> relation = dp.decodeRelation(decodedRelationId);
+                        if (edgesInfo.get(relationIdEncode) instanceof JSONObject) {
+                            List<String> fromNodeInfo = new ArrayList<String>();
+                            List<String> toNodeInfo = new ArrayList<String>();
+                            JSONObject edgeInfo = (JSONObject) edgesInfo.get(relationIdEncode);
                             Iterator<String> infoKeys = edgeInfo.keys();
-                            String edgeType = "";
-                            String fromNode = "" ;
-                            String toNode = "";
                             while (infoKeys.hasNext()) {
                                 String infoTag = infoKeys.next();
-                                if (infoTag.equals("prov:type")) {
-                                    edgeType = (String) edgeInfo.get(infoTag);
-                                }
                                 if (infoTag.equals("prov:activity")) {
-                                    fromNode = (String) edgeInfo.get(infoTag);
+                                    String fromNode = (String) edgeInfo.get(infoTag);
+                                    byte[] decodedNodeId = dp.decodeBase64(fromNode);
+                                    byte[] decodedType = Arrays.copyOfRange(decodedNodeId, 0, 8);
+                                    ArrayUtils.reverse(decodedType);
+                                    if (Hex.encodeHexString(decodedType).equals("2000000000100000"))
+                                        fromNodeInfo = dp.decodePacket(decodedNodeId);
+                                    else fromNodeInfo = dp.decodeNode(decodedNodeId);
                                 }
                                 if (infoTag.equals("prov:entity")) {
-                                    toNode = (String) edgeInfo.get(infoTag);
+                                    String toNode = (String) edgeInfo.get(infoTag);
+                                    byte[] decodedNodeId = dp.decodeBase64(toNode);
+                                    byte[] decodedType = Arrays.copyOfRange(decodedNodeId, 0, 8);
+                                    ArrayUtils.reverse(decodedType);
+                                    if (Hex.encodeHexString(decodedType).equals("2000000000100000"))
+                                        toNodeInfo = dp.decodePacket(decodedNodeId);
+                                    else toNodeInfo = dp.decodeNode(decodedNodeId);
                                 }
                             }
-                            if (!edgeType.equals("") && !fromNode.equals("") && !toNode.equals(""))
-                                retval.add(Triple.of(fromNode, toNode, edgeType));
+                            if (!fromNodeInfo.isEmpty() && !toNodeInfo.isEmpty() && !relation.isEmpty())
+                                retval.add(Triple.of(fromNodeInfo, toNodeInfo, relation));
                             else {
                                 System.err.println("Bad-formatted JSON object -- Contact CamFlow");
                                 System.exit(1);
