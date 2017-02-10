@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8b627af4-3b8b-482d-a2ec-e3d410c8d7fa" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/CamflowSystem.java" afterPath="$PROJECT_DIR$/src/CamflowSystem.java" />
     </list>
     <ignored path="camflow-system.iws" />
@@ -28,8 +27,8 @@
       <file leaf-file-name="CamflowSystem.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/CamflowSystem.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="108">
-              <caret line="96" column="49" lean-forward="false" selection-start-line="96" selection-start-column="49" selection-end-line="96" selection-end-column="49" />
+            <state relative-caret-position="126">
+              <caret line="177" column="53" lean-forward="true" selection-start-line="177" selection-start-column="53" selection-end-line="177" selection-end-column="53" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -72,7 +71,7 @@
       <file leaf-file-name="ProvenanceProcess.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ProvenanceProcess.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="251">
+            <state relative-caret-position="-127">
               <caret line="15" column="13" lean-forward="false" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -127,8 +126,8 @@
       <file leaf-file-name="MachinePacket.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/MachinePacket.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="26" column="0" lean-forward="false" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
+            <state relative-caret-position="72">
+              <caret line="5" column="13" lean-forward="false" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
               <folding />
             </state>
           </provider>
@@ -985,13 +984,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ProvenanceProcess.java">
+    <entry file="file://$PROJECT_DIR$/src/MachinePacket.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="251">
-          <caret line="15" column="13" lean-forward="false" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="72">
+          <caret line="5" column="13" lean-forward="false" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1006,18 +1003,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/MachinePacket.java">
+    <entry file="file://$PROJECT_DIR$/src/ProvenanceProcess.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="26" column="0" lean-forward="false" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
-          <folding />
+        <state relative-caret-position="-127">
+          <caret line="15" column="13" lean-forward="false" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/CamflowSystem.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="96" column="49" lean-forward="false" selection-start-line="96" selection-start-column="49" selection-end-line="96" selection-end-column="49" />
+        <state relative-caret-position="126">
+          <caret line="177" column="53" lean-forward="true" selection-start-line="177" selection-start-column="53" selection-end-line="177" selection-end-column="53" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

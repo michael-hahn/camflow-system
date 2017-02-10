@@ -172,16 +172,13 @@ public class CamflowSystem {
                                 .option("password", args[2])
                                 .option("QoS", "2")
                                 .load(args[0]);
-                        Dataset<ProvenancePacket> provInfo = pp.parseProvenance(provenance);
 
-
-                        StreamingQuery provQuery = provInfo.writeStream()
+                        StreamingQuery provQuery = pp.parseProvenance(provenance)
+                                .writeStream()
                                 .outputMode("append")
                                 .format("console")
-                                //.format("parquet")
-                                //.option("path", "../out/output")
-                                //.option("checkpointLocation", "../out/checkpoint")
                                 .start();
+
                         try {
                             provQuery.awaitTermination();
                         } catch (StreamingQueryException sqe) {
