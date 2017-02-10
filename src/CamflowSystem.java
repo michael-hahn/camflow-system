@@ -1,31 +1,17 @@
-import breeze.optimize.linear.LinearProgram;
-import jdk.nashorn.internal.parser.JSONParser;
-import netscape.javascript.JSException;
 import org.apache.spark.api.java.function.FilterFunction;
-import org.apache.spark.api.java.function.FlatMapFunction;
 import org.apache.spark.api.java.function.MapFunction;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Encoders;
-import org.apache.spark.sql.Encoder;
 import org.apache.spark.sql.*;
-import org.apache.spark.sql.catalyst.parser.ParseException;
 import org.apache.spark.sql.streaming.StreamingQuery;
 import org.apache.spark.sql.streaming.StreamingQueryException;
-import org.eclipse.paho.client.mqttv3.*;
-import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import javax.crypto.Mac;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.Serializable;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.zip.DataFormatException;
-import java.util.zip.Inflater;
 
 
 /**

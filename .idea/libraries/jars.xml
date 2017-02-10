@@ -1,13 +1,17 @@
 <component name="libraryTable">
   <library name="jars">
     <CLASSES>
-      <root url="file://$PROJECT_DIR$/../spark-2.1.0/assembly/target/scala-2.11/jars" />
+      <root url="file://$PROJECT_DIR$/dependencies/spark/assembly/target/scala-2.11/jars" />
+      <root url="jar://$PROJECT_DIR$/dependencies/paho.mqtt.java/org.eclipse.paho.client.mqttv3/target/org.eclipse.paho.client.mqttv3-1.1.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/dependencies/open-json/target/json-1.8-SNAPSHOT.jar!/" />
+      <root url="jar://$PROJECT_DIR$/dependencies/apache-bahir-2.0.2-src/streaming-mqtt/target/spark-streaming-mqtt_2.11-2.0.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/dependencies/apache-bahir-2.0.2-src/sql-streaming-mqtt/target/spark-sql-streaming-mqtt_2.11-2.0.2.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
-      <root url="file://$PROJECT_DIR$/../spark-2.1.0/assembly/target/scala-2.11/jars" />
+      <root url="file://$PROJECT_DIR$/dependencies/spark/assembly/target/scala-2.11/jars" />
     </SOURCES>
-    <jarDirectory url="file://$PROJECT_DIR$/../spark-2.1.0/assembly/target/scala-2.11/jars" recursive="false" />
-    <jarDirectory url="file://$PROJECT_DIR$/../spark-2.1.0/assembly/target/scala-2.11/jars" recursive="false" type="SOURCES" />
+    <jarDirectory url="file://$PROJECT_DIR$/dependencies/spark/assembly/target/scala-2.11/jars" recursive="false" />
+    <jarDirectory url="file://$PROJECT_DIR$/dependencies/spark/assembly/target/scala-2.11/jars" recursive="false" type="SOURCES" />
   </library>
 </component>
