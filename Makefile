@@ -20,7 +20,7 @@ mqtt:
 	cd ./dependencies/paho.mqtt.java && git checkout -b tags/v1.1.0
 	cd ./dependencies/paho.mqtt.java && mvn -DskipTests clean package
 
-dependencies: spark bahir json
+dependencies: spark bahir json mqtt
 
 clean:
 	rm -rf dependencies
