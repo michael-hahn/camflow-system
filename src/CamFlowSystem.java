@@ -19,13 +19,13 @@ import org.apache.spark.SparkContext;
  * Created by Michael on 2/4/17.
  */
 //TODO: A global primitive needed to track machines?
-public class CamflowSystem {
+public class CamFlowSystem {
 
     public static void main(String[] args) {//args: brokerURL Username Password
         //First connect to the broker and clear out all the old messages in the topics camflow/machines/#
         //TODO: Check the length of the arguments, so far the number of arguments is 3. This will change later.
         if (args.length < 3) {
-            System.err.println("Usage: CamflowSystem <MQTTBrokerURL> <Username> <Password>");
+            System.err.println("Usage: CamFlowSystem <MQTTBrokerURL> <Username> <Password>");
             System.exit(1);
         }
 
