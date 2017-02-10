@@ -3,25 +3,16 @@
 # Overview
 # Example Usage
 # Getting Started
-## Following instructions are for developing in IntelliJ IDEA
-1. To set up IntelliJ environment. Download Spark source code (not the ones with Hadoop, but do download the one with all extensions including Spark SQL, Structured Streaming, and GraphX), extract and build with the following command:
-`build/mvn -DskipTests clean package`
-2. Once built. In the Project Structure -> Libraries
-Click "+"
-Choose Java
-Import 
-`Spark 2.1.0/assembly/target/scala-2.11/jars`
-3. Download latest Apache Bahir online. Currently I am using Bahir 2.0.2.
-4. Build Bahir using the following command after extraction
-`mvn -DskipTests clean install`
-This should be built using Maven 3.3.9 or above.
-5. In Project Structure again -> Libraries -> + -> Choose Java
-Import
-`apache-bahir-2.0.2-src/sql-streaming-mqtt/target/spark-sql-streaming-mqtt_2.11-2.0.2.jar`
-and
-`spark-streaming-mqtt_2.11-2.0.2.jar`
-This is for supporting MQTT with Spark
-6. **Warning: bahir contains a dependency issue**
-   * You can solve this issue by importing the following package
-     `org.eclipse.paho.client.mqtt3-1.1.0`
-7. Step 6 may not be necessary.
+
+First install required dependencies:
+JDK 1.8, IntelliJ IDEA, git and maven
+
+Then run the following commands:
+```
+git clone https://github.com/michael-hahn/camflow-system.git
+cd camflow-system
+make dependencies
+```
+
+Once the dependencies have finished building, open the project with IntelliJ.
+

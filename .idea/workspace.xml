@@ -2,17 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8b627af4-3b8b-482d-a2ec-e3d410c8d7fa" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/org_eclipse_paho_client_mqttv3_1_1_0.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/org_json_org_json_2_0.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/spark_sql_streaming_mqtt_2_11_2_0_2.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/spark_streaming_mqtt_2_11_2_0_2.xml" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/jars.xml" afterPath="$PROJECT_DIR$/.idea/libraries/jars.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/camflow-system.iml" afterPath="$PROJECT_DIR$/camflow-system.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/CamflowSystem.java" afterPath="$PROJECT_DIR$/src/CamflowSystem.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ProvenanceProcess.java" afterPath="$PROJECT_DIR$/src/ProvenanceProcess.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
     </list>
     <ignored path="camflow-system.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -66,16 +56,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="camflow-system.iml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/camflow-system.iml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="234">
-              <caret line="13" column="9" lean-forward="false" selection-start-line="13" selection-start-column="9" selection-end-line="13" selection-end-column="9" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name=".gitignore" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
@@ -86,7 +66,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ProvenanceProcess.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ProvenanceProcess.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ProvenanceProcess.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="180">
@@ -94,6 +74,16 @@
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="README.md" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="270">
+              <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -172,7 +162,6 @@
         <option value="$PROJECT_DIR$/src/MachinePacket.java" />
         <option value="$PROJECT_DIR$/src/jsonHelper.java" />
         <option value="$PROJECT_DIR$/camflow-system.iml" />
-        <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/src/ProvenancePacket.java" />
         <option value="$PROJECT_DIR$/src/DecodePacket.java" />
         <option value="$PROJECT_DIR$/src/JsonHelper.java" />
@@ -184,6 +173,7 @@
         <option value="$PROJECT_DIR$/.idea/libraries/jars.xml" />
         <option value="$PROJECT_DIR$/src/CamflowSystem.java" />
         <option value="$PROJECT_DIR$/src/ProvenanceProcess.java" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
@@ -953,13 +943,6 @@
     </entry>
     <entry file="jar://$PROJECT_DIR$/../scala-2.11.8/lib/scala-parser-combinators_2.11-1.0.4.jar!/scala/util/parsing/json/JSONObject.class" />
     <entry file="file://$PROJECT_DIR$/../spark-2.1.0/examples/src/main/java/org/apache/spark/examples/sql/JavaSparkSQLExample.java" />
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="432">
-          <caret line="24" column="30" lean-forward="false" selection-start-line="24" selection-start-column="30" selection-end-line="24" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$PROJECT_DIR$/../spark-2.1.0/assembly/target/scala-2.11/jars/spark-network-common_2.11-2.1.0.jar!/org/spark_project/guava/reflect/TypeToken.class" />
     <entry file="file://$PROJECT_DIR$/Makefile">
       <provider selected="true" editor-type-id="text-editor">
@@ -1084,6 +1067,14 @@
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
