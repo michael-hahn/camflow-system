@@ -167,4 +167,12 @@ public class ProvenanceProcess implements Serializable {
 
         return decodedProvenanceContent;
     }
+
+    public Dataset<CamFlowEdge> edges(Dataset<Row> provenance){
+        return null;//TODO
+    }
+
+    public Dataset<CamFlowVertex> vertices(Dataset<Row> provenance){
+        return null;//TODO
+    }
 }
