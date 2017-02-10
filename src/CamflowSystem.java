@@ -12,6 +12,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.zip.DataFormatException;
+import org.apache.spark.SparkContext;
 
 
 /**
@@ -85,11 +86,16 @@ public class CamflowSystem {
         //At this point, use Spark for MQTT message streaming
         System.out.println("Initiating Spark for MQTT streaming");
 
+
+
         SparkSession spark = SparkSession
                 .builder()
                 .appName("CamFlowSystem")
                 .master("local[4]")
                 .getOrCreate();//TODO: Check API. What does it do?
+
+        spark.sparkContext().setLogLevel("WARN");
+
         //Create DataStreamReader for streaming dataFrames
         Dataset<Row> packets = spark
                 .readStream()
