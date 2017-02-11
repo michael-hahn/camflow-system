@@ -12,7 +12,6 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.zip.DataFormatException;
-import org.apache.spark.SparkContext;
 
 
 /**

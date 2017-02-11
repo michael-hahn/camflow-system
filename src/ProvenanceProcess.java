@@ -4,7 +4,6 @@ import org.apache.spark.api.java.function.FlatMapFunction;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Encoders;
 import org.apache.spark.sql.Row;
-import org.apache.spark.sql.catalyst.expressions.Encode;
 import org.javatuples.Quartet;
 import org.json.JSONException;
 import org.json.JSONObject;
