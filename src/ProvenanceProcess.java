@@ -1,8 +1,11 @@
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 import org.apache.spark.api.java.function.FlatMapFunction;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Encoders;
 import org.apache.spark.sql.Row;
+import org.apache.spark.sql.catalyst.expressions.Encode;
+import org.javatuples.Quartet;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.IOException;
@@ -168,11 +171,99 @@ public class ProvenanceProcess implements Serializable {
         return decodedProvenanceContent;
     }
 
+
+    /**
+     * This function creates a dataset of CamFlowEdge information
+     * @param provenance provenance packet from CamFlow
+     * @return a dataset of type CamFlowEdge
+     */
     public Dataset<CamFlowEdge> edges(Dataset<Row> provenance){
-        return null;//TODO
+        Dataset<CamFlowEdge> edgeContent = provenance
+                .select("value")
+                .as(Encoders.STRING())
+                .flatMap(new FlatMapFunction<String, CamFlowEdge>() {
+                    @Override
+                    public Iterator<CamFlowEdge> call(String s) throws Exception {
+                        //return value of this call function initialized
+                        List<CamFlowEdge> retval = new ArrayList<CamFlowEdge>();
+
+                        //decodePacket class for decoding the packet
+                        DecodePacket dp = new DecodePacket();
+                        //Base 64 decode received packet
+                        byte[] decodedBytes = dp.decodeBase64(s);
+                        //Zlib decompress received packet
+                        byte[] output = dp.decodeZlib(decodedBytes);
+                        //for debug only
+                        System.out.println("Packet Content:" + new String(output));
+
+                        //serialize the string to JSON
+                        JSONObject provenanceJson = new JSONObject(new String(output));
+
+                        //get edge information from JSONObject
+                        JsonHelper jh = new JsonHelper();
+                        List<Quartet<String, String, String, List<String[]>>> edgesInfo = jh.edgesProvenance(provenanceJson);
+
+                        //generate CamFlowEdge instances of each element in edgesInfo list
+                        Iterator<Quartet<String, String, String, List<String[]>>> itr = edgesInfo.iterator();
+                        while (itr.hasNext()) {
+                            Quartet<String, String, String, List<String[]>> edgeInfo = itr.next();
+                            CamFlowEdge cfe = new CamFlowEdge();
+                            cfe.setSrcId(edgeInfo.getValue0());
+                            cfe.setDstId(edgeInfo.getValue1());
+                            cfe.setW3CType(edgeInfo.getValue2());
+                            cfe.setAttributes(edgeInfo.getValue3());
+                            retval.add(cfe);
+                        }
+                        return retval.iterator();
+                    }
+                }, Encoders.bean(CamFlowEdge.class));
+        return edgeContent;
     }
 
-    public Dataset<CamFlowVertex> vertices(Dataset<Row> provenance){
-        return null;//TODO
+    /**
+     * This function creates a dataset of CamFlowVertex information
+     * @param provenance provenance packet from CamFlow
+     * @return a dataset of type CamFlowVertex
+     */
+    public Dataset<CamFlowVertex> vertices(Dataset<Row> provenance) {
+        Dataset<CamFlowVertex> vertexContent = provenance
+                .select("value")
+                .as(Encoders.STRING())
+                .flatMap(new FlatMapFunction<String, CamFlowVertex>() {
+                    @Override
+                    public Iterator<CamFlowVertex> call(String s) throws Exception {
+                        //return value of this call function initialized
+                        List<CamFlowVertex> retval = new ArrayList<CamFlowVertex>();
+
+                        //decodePacket class for decoding the packet
+                        DecodePacket dp = new DecodePacket();
+                        //Base 64 decode received packet
+                        byte[] decodedBytes = dp.decodeBase64(s);
+                        //Zlib decompress received packet
+                        byte[] output = dp.decodeZlib(decodedBytes);
+                        //for debug only
+                        System.out.println("Packet Content:" + new String(output));
+
+                        //serialize the string to JSON
+                        JSONObject provenanceJson = new JSONObject(new String(output));
+
+                        //get vertice information from JSONObject
+                        JsonHelper jh = new JsonHelper();
+                        List<Pair<String, Pair<String, List<String[]>>>> verticesInfo = jh.verticesProvenance(provenanceJson);
+
+                        //generate CamFlowEdge instances of each element in verticesInfo list
+                        Iterator<Pair<String, Pair<String, List<String[]>>>> itr = verticesInfo.iterator();
+                        while (itr.hasNext()) {
+                            Pair<String, Pair<String, List<String[]>>> vertexInfo = itr.next();
+                            CamFlowVertex cfv = new CamFlowVertex();
+                            cfv.setId(vertexInfo.getLeft());
+                            cfv.setW3CType(vertexInfo.getRight().getLeft());
+                            cfv.setAttributes(vertexInfo.getRight().getRight());
+                            retval.add(cfv);
+                        }
+                        return retval.iterator();
+                    }
+                }, Encoders.bean(CamFlowVertex.class));
+        return vertexContent;
     }
 }

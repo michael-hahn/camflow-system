@@ -163,7 +163,10 @@ public class CamFlowSystem {
                                 .builder()
                                 .appName("CamFlowSystemProvenance")
                                 .master("local[4]")
-                                .getOrCreate();//
+                                .getOrCreate();
+
+                        sparkProv.sparkContext().setLogLevel("WARN");
+
                         Dataset<Row> provenance = sparkProv
                                 .readStream()
                                 .format("org.apache.bahir.sql.streaming.mqtt.MQTTStreamSourceProvider")
@@ -173,7 +176,10 @@ public class CamFlowSystem {
                                 .option("QoS", "2")
                                 .load(args[0]);
 
-                        StreamingQuery provQuery = pp.parseProvenance(provenance)
+                        Dataset<CamFlowEdge> edgeData = pp.edges(provenance);
+                        Dataset<CamFlowVertex> vertexData = pp.vertices(provenance);
+
+                        StreamingQuery provQuery = edgeData
                                 .writeStream()
                                 .outputMode("append")
                                 .format("console")

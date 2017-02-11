@@ -1,6 +1,6 @@
 spark:
 	mkdir -p dependencies
-	cd ./dependencies	&& git clone git://github.com/apache/spark.git -b branch-2.1
+	cd ./dependencies && git clone git://github.com/apache/spark.git -b branch-2.1
 	cd ./dependencies/spark && build/mvn -DskipTests clean package
 
 bahir:
@@ -20,7 +20,12 @@ mqtt:
 	cd ./dependencies/paho.mqtt.java && git checkout -b tags/v1.1.0
 	cd ./dependencies/paho.mqtt.java && mvn -DskipTests clean package
 
-dependencies: spark bahir json mqtt
+javatuples:
+	mkdir -p dependencies
+	cd ./dependencies && git clone https://github.com/javatuples/javatuples.git
+	cd ./dependencies/javatuples && mvn -DskipTests clean package
+
+dependencies: spark bahir json mqtt javatuples
 
 clean:
 	rm -rf dependencies
