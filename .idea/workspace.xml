@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="8b627af4-3b8b-482d-a2ec-e3d410c8d7fa" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="camflow-system.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -68,8 +67,8 @@
       <file leaf-file-name="README.md" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.8467742">
-              <caret line="39" column="0" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.41129032">
+              <caret line="25" column="126" selection-start-line="25" selection-start-column="126" selection-end-line="25" selection-end-column="126" />
               <folding />
             </state>
           </provider>
@@ -210,7 +209,7 @@
     <order />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="343" />
+    <option name="x" value="170" />
     <option name="y" value="23" />
     <option name="width" value="1301" />
     <option name="height" value="744" />
@@ -767,15 +766,15 @@
       <workItem from="1486854116810" duration="7000" />
       <workItem from="1486854437552" duration="1036000" />
       <workItem from="1486934219730" duration="143000" />
-      <workItem from="1486941277646" duration="4403000" />
+      <workItem from="1486941277646" duration="4778000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="127280000" />
+    <option name="totallyTimeSpent" value="127655000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="343" y="23" width="1301" height="744" extended-state="0" />
+    <frame x="170" y="23" width="1301" height="744" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1213,8 +1212,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.8467742">
-          <caret line="39" column="0" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.41129032">
+          <caret line="25" column="126" selection-start-line="25" selection-start-column="126" selection-end-line="25" selection-end-column="126" />
           <folding />
         </state>
       </provider>

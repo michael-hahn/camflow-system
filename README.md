@@ -16,13 +16,20 @@
 #### Interpret Provenance Packets
 Currently, provenance packets are `Base64` encoded and `zlib` compressed. The contents are in the format of `PROV-JSON`
 Interpreting provenance packets results in two `Dataset`s, one containing `CamFlowVertex` instances and one `CamFlowEdge` instances
+
 - `Dataset<CamFlowVertex>`
+
+
 | Property Name | Property Type (Java) | Description                          | Example                                      |
 | :---          | :---                 | :---                                 | :---                                         |
 | id            | `String`             | Unique ID that identifies the vertex | AQAAAAAAAEBWpAEAAAAAAP2S3vK12+s85QAAAAAAAAA= |
 | W3CType       | `String`             | Type of the vertex/node              | task                                         |
 | attributes    | `List<String[]>`     | All other attributes in PROV-JSON entity/activity | (cf:id, 107606) (cf:version, 229)            |
+
+
 - `Dataset<CamFlowEdge>`
+
+
 | Property Name | Property Type (Java) | Description                          | Example                                      |
 | :---          | :---                 | :---                                 | :---                                         |
 | srcId | `String` | The ID of the from node | AEAAAAAAACBjpAEAAAAAAP2S3vK12+s8AAAAAAAAAAA= |
@@ -30,13 +37,14 @@ Interpreting provenance packets results in two `Dataset`s, one containing `CamFl
 | W3CType | `String` | Type of the edge or the relation between two nodes | mmap_read, perm_read, mmap_write |
 | attributes | `List<String[]>` | All other attributes in PROV-JSON used/wasInformedBy/wasGeneratedBy/wasDerivedFrom | (cf:id, 22922) (cf:offset, 832) |
 
+
 # Example Usage
 # Task List
-- [x] Receiving packets from MQTT broker
-- [x] Interpreting provenance packets and generating vertex and edge information
-- [ ] Converting the vertex and edge datasets to VertexRDD and EdgeRDD
+- [x] Receive packets from MQTT broker
+- [x] Interpret provenance packets and generating vertex and edge information
+- [ ] Convert the vertex and edge datasets to VertexRDD and EdgeRDD
 - [ ] Use better format than PROV-JSON
-- [ ] Decide next step
+- [ ] Decide next steps
 
 # Getting Started
 
