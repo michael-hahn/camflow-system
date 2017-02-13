@@ -2,6 +2,10 @@
 ###################
 *.class
 
+# IDE related files #
+#####################
+.idea/workspace.xml
+
 # Logs and databases #
 ######################
 *.msg
@@ -13,4 +17,5 @@
 .DS_Store?
 
 # dependencies #
+################
 dependencies/
